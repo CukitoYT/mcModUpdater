@@ -6,16 +6,14 @@ async function getModFiles(
 	modID,
 	mcVersion,
 	modVersion,
-	loader = 'Fabric' || 'Forge' || 'Quilt',
-	loaderPlace = 'Client' || 'Server'
+	loader = 'Fabric' || 'Forge' || 'Quilt'
 ) {
 	const options = {
 		method: 'GET',
 		url: `https://api.curseforge.com/v1/mods/${modID}/files`,
 		headers: {
 			Accept: 'application/json',
-			'x-api-key':
-				'$2a$10$vZraELhJUVjlB.f16ndNAujFMUPtAmNuQlSNDI14Ilbk5EANECG3e',
+			'x-api-key': import.meta.env.VITE_X_CURSEFORGE_API_KEY,
 		},
 	};
 
@@ -25,8 +23,7 @@ async function getModFiles(
 		const file = files.find(
 			(item) =>
 				item.gameVersions.includes(mcVersion) &&
-				item.gameVersions.includes(loader) &&
-				item.gameVersions.includes(loaderPlace)
+				item.gameVersions.includes(loader)
 		);
 		return file ? file.downloadUrl : 'No file found';
 	} catch (error) {
@@ -39,7 +36,7 @@ function App() {
 	const [modFileUrl, setModFileUrl] = useState('');
 
 	useEffect(() => {
-		getModFiles(303119, '1.20.4', '1.0.0', 'Fabric', 'Client').then(
+		getModFiles(303119, '1.14', '1.0.0', 'Fabric', 'Client').then(
 			setModFileUrl
 		);
 	}, []);
